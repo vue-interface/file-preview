@@ -5,19 +5,23 @@
                 <font-awesome-icon icon="times-circle" />
             </a>
 
-            <div v-if="!!url || isImage" class="file-preview-image">
-                <img v-if="!!url || !!image" :src="url || image" class="file-preview-thumbnail" @load="onLoad">
+            <div v-if="preview && (!!url || isImage)" class="file-preview-image">
+                <slot name="icon">
+                    <img v-if="!!url || !!image" :src="url || image" class="file-preview-thumbnail" @load="onLoad">
+                </slot>
             </div>
 
             <div v-else v-ready="onLoad" class="file-preview-icon">
-                <font-awesome-icon :icon="isVideo ? 'file-video' : 'file-alt'" />
+                <slot name="icon">
+                    <font-awesome-icon :icon="['far', computedIcon]" />
+                </slot>
             </div>
 
             <div class="mt-2 mb-1">
                 <progress-bar
-                    v-if="isImage && typeof loaded === 'number'"
+                    v-if="isImage && loaded !== true"
                     v-ready="readFile"
-                    :value="loaded"
+                    :value="currentProgress"
                     :height="10" />
 
                 <progress-bar
@@ -38,16 +42,16 @@
 </template>
 
 <script>
+import icons from './icons';
 import ProgressBar from '@vue-interface/progress-bar';
 import { isFunction } from '@vue-interface/utils';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faFileAlt, faFileVideo, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faFileArchive, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileVideo, faFileWord } from '@fortawesome/free-regular-svg-icons';
 
-library.add(faFileAlt);
-library.add(faFileVideo);
-library.add(faTimesCircle);
+library.add(faFileAlt, faFileArchive, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileVideo, faFileWord, faTimesCircle);
 
 export default {
 
@@ -88,6 +92,16 @@ export default {
         extension: String,
 
         /**
+         * The file extension icon map.
+         * 
+         * @property {Object}
+         */
+        extensionIcons: {
+            type: Object,
+            default: () => icons
+        },
+
+        /**
          * The uploaded File object
          *
          * @property Object
@@ -114,6 +128,16 @@ export default {
          * @property {String}
          */
         name: String,
+
+        /**
+         * Disable the image preview and use an icon instead.
+         * 
+         * @property {Boolean}
+         */
+        preview: {
+            type: Boolean,
+            default: true
+        },
 
         /**
          * Progress that can be passed from a parent comparent, for instance
@@ -143,8 +167,9 @@ export default {
 
     data() {
         return {
+            currentProgress: 0,
             image: null,
-            loaded: this.file instanceof Blob ? 0 : false
+            loaded: false,
         };
     },
 
@@ -174,7 +199,38 @@ export default {
          * @property String
          */
         computedSize() {
-            return this.file || this.size ? this.bytesToSize(this.file ? this.file.size : this.size) : '0 Bytes';
+            return this.bytesToSize(this.file ? this.file.size : (this.size || 0));
+        },
+
+        /**
+         * Get the icon based on the extension.
+         *
+         * @property String
+         */
+        computedIcon() {
+            const entries = Object.entries(this.extensionIcons);
+
+            const matches = entries.filter(([icon, schema]) => {
+                if(Array.isArray(schema)) {
+                    schema = {
+                        extensions: schema
+                    };
+                }
+
+                if(schema.validate && schema.validate(this.computedMime)) {
+                    return true;
+                }
+
+                return schema.extensions.indexOf(this.computedExtension) > -1;
+            });
+
+            if(matches.length) {
+                const [ extension ] = matches[0];
+
+                return extension;
+            }
+
+            return 'file-alt';
         },
 
         /**
@@ -182,7 +238,7 @@ export default {
          *
          * @property String
          */
-        computedType() {
+        computedMime() {
             return this.file instanceof Blob ? this.file.type : this.mime;
         },
 
@@ -230,11 +286,11 @@ export default {
             const start = new Date().getTime();
             const reader = new FileReader();
             
-            this.loaded = 0;
+            this.currentProgress = 0;
 
             reader.onprogress = e => {
                 if(e.lengthComputable) {
-                    this.$emit('progress', this.loaded = parseInt((e.loaded / e.total) * 100, 10));
+                    this.$emit('progress', this.currentProgress = parseInt((e.loaded / e.total) * 100, 10));
                 }
             };
 

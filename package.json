@@ -23,8 +23,8 @@
     "url": "git+https://github.com/vue-interface/file-preview.git"
   },
   "keywords": [
-    "Upload",
-    "Field",
+    "File",
+    "Preview",
     "Vue",
     "Component",
     "Tailwind",

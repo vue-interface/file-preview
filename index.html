@@ -9,11 +9,13 @@
     </head>
     <body>
         <form id="app" class="container">
-            <h1 class="mb-5">upload-field</h1>
+            <h1 class="mb-5">file-preview</h1>
             
             <input type="file" @input="onInput" multiple />
 
             <file-preview v-for="(file, i) in files" :file="file" :key="file.name" @close="onClose(i)"></file-preview>
+
+            <hr class="mb-5">
 
             <h3>Image Preview</h3>
 
