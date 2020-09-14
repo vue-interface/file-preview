@@ -296,10 +296,13 @@ export default {
 
             reader.onload = e => {
                 this.$emit('read', event);
+                this.$nextTick(() => this.image = e.target.result);
 
+                /*
                 setTimeout(() => {
                     this.image = e.target.result;
-                }, 500 - (((new Date().getTime() - start) / 1000)));
+                }, 250 - (((new Date().getTime() - start) / 1000)));
+                */
             };
             
             reader.onerror = e => {
@@ -319,7 +322,7 @@ export default {
         onLoad(event) {
             this.loaded = true;
             this.$emit('loaded');
-        }
+        },
 
     }
 
@@ -363,7 +366,6 @@ export default {
 }
 
 .file-preview .file-preview-thumbnail {
-    width: 100%;
     max-width: 100%;
 }
 

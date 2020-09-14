@@ -1011,41 +1011,6 @@ fixRegExpWellKnownSymbolLogic('match', 1, function (MATCH, nativeMatch, maybeCal
 
 /***/ }),
 
-/***/ "4795":
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__("23e7");
-var global = __webpack_require__("da84");
-var userAgent = __webpack_require__("342f");
-
-var slice = [].slice;
-var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
-
-var wrap = function (scheduler) {
-  return function (handler, timeout /* , ...arguments */) {
-    var boundArgs = arguments.length > 2;
-    var args = boundArgs ? slice.call(arguments, 2) : undefined;
-    return scheduler(boundArgs ? function () {
-      // eslint-disable-next-line no-new-func
-      (typeof handler == 'function' ? handler : Function(handler)).apply(this, args);
-    } : handler, timeout);
-  };
-};
-
-// ie9- setTimeout & setInterval additional parameters fix
-// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-$({ global: true, bind: true, forced: MSIE }, {
-  // `setTimeout` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-  setTimeout: wrap(global.setTimeout),
-  // `setInterval` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-  setInterval: wrap(global.setInterval)
-});
-
-
-/***/ }),
-
 /***/ "4840":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6960,12 +6925,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./src/css/FilePreview.css
 var FilePreview = __webpack_require__("03f6");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"39ca0ff8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FilePreview.vue?vue&type=template&id=fb0c3ec2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"aaf5de14-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FilePreview.vue?vue&type=template&id=e57e7ab6&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"file-preview",class:{'has-image': !!_vm.image}},[_c('div',{staticClass:"file-preview-inner"},[(_vm.loaded === true && _vm.closeable)?_c('a',{staticClass:"file-preview-close",attrs:{"href":"#"},on:{"click":function($event){$event.preventDefault();return (function (e) { return _vm.$emit('close', e, _vm.file); })($event)}}},[_c('font-awesome-icon',{attrs:{"icon":"times-circle"}})],1):_vm._e(),(_vm.preview && (!!_vm.url || _vm.isImage))?_c('div',{staticClass:"file-preview-image"},[_vm._t("icon",[(!!_vm.url || !!_vm.image)?_c('img',{staticClass:"file-preview-thumbnail",attrs:{"src":_vm.url || _vm.image},on:{"load":_vm.onLoad}}):_vm._e()])],2):_c('div',{directives:[{name:"ready",rawName:"v-ready",value:(_vm.onLoad),expression:"onLoad"}],staticClass:"file-preview-icon"},[_vm._t("icon",[_c('font-awesome-icon',{attrs:{"icon":['far', _vm.computedIcon]}})])],2),_c('div',{staticClass:"mt-2 mb-1"},[(_vm.isImage && _vm.loaded !== true)?_c('progress-bar',{directives:[{name:"ready",rawName:"v-ready",value:(_vm.readFile),expression:"readFile"}],attrs:{"value":_vm.currentProgress,"height":10}}):_vm._e(),(_vm.progress)?_c('progress-bar',{attrs:{"variant":"success","value":_vm.progress,"height":10}}):_vm._e()],1),_vm._t("default"),_c('div',{staticClass:"file-preview-filename",domProps:{"innerHTML":_vm._s(_vm.computedName)}}),_c('div',{staticClass:"file-preview-filesize"},[_vm._v(" ("+_vm._s(_vm.computedSize)+") ")])],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/FilePreview.vue?vue&type=template&id=fb0c3ec2&
+// CONCATENATED MODULE: ./src/FilePreview.vue?vue&type=template&id=e57e7ab6&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("4de4");
@@ -6999,9 +6964,6 @@ var es_string_match = __webpack_require__("466d");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__("1276");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__("4795");
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
 
@@ -7146,7 +7108,7 @@ function _slicedToArray(arr, i) {
   },
   'file-word': ['doc', 'docx']
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"39ca0ff8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/@vue-interface/progress-bar/src/ProgressBar.vue?vue&type=template&id=c1a93280&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"aaf5de14-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/@vue-interface/progress-bar/src/ProgressBar.vue?vue&type=template&id=c1a93280&
 var ProgressBarvue_type_template_id_c1a93280_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.classes,style:(_vm.styles),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(!!_vm.label)?_c('span',[(_vm.label !== true)?[_vm._v(" "+_vm._s(_vm.label)+" ")]:_vm._e(),_vm._v(" "+_vm._s(_vm.offsetValue)+"% ")],2):_c('span',[_vm._t("default")],2)])])}
 var ProgressBarvue_type_template_id_c1a93280_staticRenderFns = []
 
@@ -15519,7 +15481,6 @@ var index_es_iconsCache = {
 
 
 
-
 //
 //
 //
@@ -15812,9 +15773,15 @@ index_es["c" /* library */].add(index_es_faFileAlt, index_es_faFileArchive, inde
       reader.onload = function (e) {
         _this2.$emit('read', event);
 
-        setTimeout(function () {
-          _this2.image = e.target.result;
-        }, 500 - (new Date().getTime() - start) / 1000);
+        _this2.$nextTick(function () {
+          return _this2.image = e.target.result;
+        });
+        /*
+        setTimeout(() => {
+            this.image = e.target.result;
+        }, 250 - (((new Date().getTime() - start) / 1000)));
+        */
+
       };
 
       reader.onerror = function (e) {
