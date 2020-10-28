@@ -6934,7 +6934,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./src/css/FilePreview.css
 var FilePreview = __webpack_require__("03f6");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"aaf5de14-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FilePreview.vue?vue&type=template&id=e57e7ab6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"82b49c0e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/FilePreview.vue?vue&type=template&id=e57e7ab6&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"file-preview",class:{'has-image': !!_vm.image}},[_c('div',{staticClass:"file-preview-inner"},[(_vm.loaded === true && _vm.closeable)?_c('a',{staticClass:"file-preview-close",attrs:{"href":"#"},on:{"click":function($event){$event.preventDefault();return (function (e) { return _vm.$emit('close', e, _vm.file); })($event)}}},[_c('font-awesome-icon',{attrs:{"icon":"times-circle"}})],1):_vm._e(),(_vm.preview && (!!_vm.url || _vm.isImage))?_c('div',{staticClass:"file-preview-image"},[_vm._t("icon",[(!!_vm.url || !!_vm.image)?_c('img',{staticClass:"file-preview-thumbnail",attrs:{"src":_vm.url || _vm.image},on:{"load":_vm.onLoad}}):_vm._e()])],2):_c('div',{directives:[{name:"ready",rawName:"v-ready",value:(_vm.onLoad),expression:"onLoad"}],staticClass:"file-preview-icon"},[_vm._t("icon",[_c('font-awesome-icon',{attrs:{"icon":['far', _vm.computedIcon]}})])],2),_c('div',{staticClass:"mt-2 mb-1"},[(_vm.isImage && _vm.loaded !== true)?_c('progress-bar',{directives:[{name:"ready",rawName:"v-ready",value:(_vm.readFile),expression:"readFile"}],attrs:{"value":_vm.currentProgress,"height":10}}):_vm._e(),(_vm.progress)?_c('progress-bar',{attrs:{"variant":"success","value":_vm.progress,"height":10}}):_vm._e()],1),_vm._t("default"),_c('div',{staticClass:"file-preview-filename",domProps:{"innerHTML":_vm._s(_vm.computedName)}}),_c('div',{staticClass:"file-preview-filesize"},[_vm._v(" ("+_vm._s(_vm.computedSize)+") ")])],2)])}
 var staticRenderFns = []
 
@@ -7117,7 +7117,7 @@ function _slicedToArray(arr, i) {
   },
   'file-word': ['doc', 'docx']
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"aaf5de14-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/@vue-interface/progress-bar/src/ProgressBar.vue?vue&type=template&id=c1a93280&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"82b49c0e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/@vue-interface/progress-bar/src/ProgressBar.vue?vue&type=template&id=c1a93280&
 var ProgressBarvue_type_template_id_c1a93280_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.classes,style:(_vm.styles),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(!!_vm.label)?_c('span',[(_vm.label !== true)?[_vm._v(" "+_vm._s(_vm.label)+" ")]:_vm._e(),_vm._v(" "+_vm._s(_vm.offsetValue)+"% ")],2):_c('span',[_vm._t("default")],2)])])}
 var ProgressBarvue_type_template_id_c1a93280_staticRenderFns = []
 
@@ -14559,6 +14559,10 @@ var _iconsCache = {
 
 
 // CONCATENATED MODULE: ./node_modules/@fortawesome/free-regular-svg-icons/index.es.js
+/*!
+ * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ */
 var free_regular_svg_icons_index_es_prefix = "far";
 var index_es_faAddressBook = {
   prefix: 'far',
