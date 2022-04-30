@@ -335,6 +335,11 @@ export default {
     background: white;
     border-radius: 100%;
     transform: translate(33%, -33%);
+    color: #4b5563;
+}
+
+.file-preview .file-preview-close:active {
+    color: #3b82f6;
 }
 
 .file-preview .file-preview-close svg {
