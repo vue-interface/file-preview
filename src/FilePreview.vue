@@ -349,7 +349,6 @@ export default {
 .file-preview .file-preview-icon {
     text-align: center;
     font-size: 60px;
-    padding: 1rem;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -357,7 +356,6 @@ export default {
 
 .file-preview .file-preview-thumbnail {
     object-fit: cover;
-    padding: 1rem;
     height: 10rem;
     width: 100%;
 }
