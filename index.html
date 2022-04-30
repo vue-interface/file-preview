@@ -4,28 +4,34 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>FilePreview</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./dist/FilePreview.css">
     </head>
     <body>
-        <form id="app" class="container">
-            <h1 class="mb-5">file-preview</h1>
+        <form id="app" class="container mx-auto mb-6">
+            <h1 class="text-4xl mb-6">file-preview</h1>
             
-            <input type="file" @input="onInput" multiple />
+            <input type="file" @input="onInput" multiple class="mb-6" />
 
-            <file-preview v-for="(file, i) in files" :file="file" :key="file.name" @close="onClose(i)"></file-preview>
+            <file-preview
+                v-for="(file, i) in files"
+                :file="file"
+                :key="file.name"
+                @close="onClose(i)">
+            </file-preview>
 
-            <hr class="mb-5">
+            <hr class="my-6">
 
-            <h3>Image Preview</h3>
+            <h3 class="text-2xl mb-3">Image Preview</h3>
 
-            <file-preview url="http://via.placeholder.com/500x500" :progress="50" :size="5000000" name="test.csv"></file-preview>
+            <file-preview url="http://via.placeholder.com/500x500" :closeable="false" filename="test.jpeg" :size="5000000" name="test.csv"></file-preview>
         </form>
 
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
-        <script type="text/javascript" src="./dist/FilePreview.umd.js"></script>
-        <script type="text/javascript">
-            const FilePreview = window.FilePreview;
+        <script type="module">
+            import './index.css';
+            import Vue from 'vue/dist/vue';
+            import { FilePreview } from './index.js';
+            
+            Vue.config.devtools = false;
+            Vue.config.productionTip = false;
 
             const vue = new Vue({
                 el: '#app',

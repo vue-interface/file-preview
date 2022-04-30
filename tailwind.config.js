@@ -1,12 +1,16 @@
-const plugin = require('tailwindcss/plugin');
-
 module.exports = {
-    purge: false,
-    corePlugins: {
-        container: false,
+    content: [
+        "./index.html"
+    ],
+    theme: {
+        extend: {},
     },
     plugins: [
-        require('@vue-interface/progress-bar/tailwindcss'),
         require('@vue-interface/variant/tailwindcss'),
+        require('@vue-interface/progress-bar/tailwindcss'),
+    ],
+    safelist: [
+        ...require('@vue-interface/variant/tailwindcss/safelist')(),
+        ...require('@vue-interface/progress-bar/tailwindcss/safelist')(),
     ]
 };

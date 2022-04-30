@@ -1,35 +1,28 @@
 <template>
-    <div class="file-preview" :class="{'has-image': !!image}">
+    <div class="file-preview" :class="{'has-image': !!data}">
         <div class="file-preview-inner">
-            <a v-if="loaded === true && closeable" href="#" class="file-preview-close" @click.prevent="e => $emit('close', e, file)">
+            <a v-if="closeable" href="#" class="file-preview-close" @click.prevent="$emit('close', $event, file)">
                 <font-awesome-icon icon="times-circle" />
             </a>
 
-            <div v-if="preview && (!!url || isImage)" class="file-preview-image">
-                <slot name="icon">
-                    <img v-if="!!url || !!image" :src="url || image" class="file-preview-thumbnail" @load="onLoad">
-                </slot>
-            </div>
-
-            <div v-else v-ready="onLoad" class="file-preview-icon">
-                <slot name="icon">
+            <slot name="icon" v-bind="this">
+                <div v-if="url || data && isImage" class="file-preview-image">
+                    <img :src="url || data" class="file-preview-thumbnail">
+                </div>
+                <div v-else class="file-preview-icon">
                     <font-awesome-icon :icon="['far', computedIcon]" />
-                </slot>
-            </div>
+                </div>
+            </slot>
 
-            <div class="mt-2 mb-1">
-                <progress-bar
-                    v-if="isImage && loaded !== true"
-                    v-ready="readFile"
-                    :value="currentProgress"
-                    :height="10" />
-
-                <progress-bar
-                    v-if="progress"
-                    variant="success"
-                    :value="progress"
-                    :height="10" />
-            </div>
+            <slot name="progress" v-bind="this">
+                <div class="mt-2 mb-1">
+                    <progress-bar
+                        v-if="typeof percentLoaded === 'number'"
+                        variant="primary"
+                        height="10px"
+                        :value="percentLoaded" />
+                </div>
+            </slot>
 
             <slot />
             
@@ -42,16 +35,39 @@
 </template>
 
 <script>
-import icons from './icons';
-import ProgressBar from '@vue-interface/progress-bar';
-import { isFunction } from '@vue-interface/utils';
-
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { faFileAlt, faFileArchive, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileVideo, faFileWord } from '@fortawesome/free-regular-svg-icons';
+import { icons } from './icons';
+import { ProgressBar } from '@vue-interface/progress-bar';
 
-library.add(faFileAlt, faFileArchive, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileVideo, faFileWord, faTimesCircle);
+import {
+    faFileAlt,
+    faFileArchive,
+    faFileAudio,
+    faFileCode,
+    faFileExcel,
+    faFileImage, 
+    faFilePdf,
+    faFilePowerpoint,
+    faFileVideo,
+    faFileWord
+} from '@fortawesome/free-regular-svg-icons';
+
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
+library.add(
+    faFileAlt,
+    faFileArchive,
+    faFileAudio, 
+    faFileCode,
+    faFileExcel,
+    faFileImage, 
+    faFilePdf, 
+    faFilePowerpoint, 
+    faFileVideo,
+    faFileWord,
+    faTimesCircle
+);
 
 export default {
 
@@ -65,7 +81,7 @@ export default {
     directives: {
         ready: {
             inserted(el, binding, vnode) {
-                if(isFunction(binding.value)) {
+                if(typeof binding.value === 'function') {
                     vnode.context.$nextTick(binding.value);
                 }
             }
@@ -92,28 +108,11 @@ export default {
         extension: String,
 
         /**
-         * The file extension icon map.
-         * 
-         * @property {Object}
-         */
-        extensionIcons: {
-            type: Object,
-            default: () => icons
-        },
-
-        /**
          * The uploaded File object
          *
          * @property Object
          */
         file: Blob,
-
-        /**
-         * The last modified date.
-         * 
-         * @property {Date}
-         */
-        lastModified: Date,
 
         /**
          * The mime type.
@@ -127,7 +126,7 @@ export default {
          * 
          * @property {String}
          */
-        name: String,
+        filename: String,
 
         /**
          * Disable the image preview and use an icon instead.
@@ -138,16 +137,6 @@ export default {
             type: Boolean,
             default: true
         },
-
-        /**
-         * Progress that can be passed from a parent comparent, for instance
-         * use to show an ajax request with a single progress bar. If a progress
-         * value is passed, even a 0, the progress bar will not be used to show
-         * the progress of the file reader.
-         * 
-         * @property {Number}
-         */
-        progress: Number,
 
         /**
          * The file size.
@@ -167,22 +156,13 @@ export default {
 
     data() {
         return {
-            currentProgress: 0,
-            image: null,
-            loaded: false,
+            data: null,
+            loading: false,
+            percentLoaded: null,
         };
     },
 
     computed: {
-
-        /**
-         * Get the file name.
-         *
-         * @property String
-         */
-        computedName() {
-            return this.file instanceof Blob ? this.file.name : this.name;
-        },
 
         /**
          * Get the file extension.
@@ -190,16 +170,9 @@ export default {
          * @property String
         */
         computedExtension() {
-            return this.file instanceof Blob ? this.file.name.split('.').pop().toLowerCase() : this.extension;
-        },
-
-        /**
-         * Get the formatted file size.
-         *
-         * @property String
-         */
-        computedSize() {
-            return this.bytesToSize(this.file ? this.file.size : (this.size || 0));
+            return this.file instanceof Blob
+                ? this.file.name.split('.').pop().toLowerCase()
+                : this.extension;
         },
 
         /**
@@ -208,26 +181,10 @@ export default {
          * @property String
          */
         computedIcon() {
-            const entries = Object.entries(this.extensionIcons);
+            const match = this.icon();
 
-            const matches = entries.filter(([icon, schema]) => {
-                if(Array.isArray(schema)) {
-                    schema = {
-                        extensions: schema
-                    };
-                }
-
-                if(schema.validate && schema.validate(this.computedMime)) {
-                    return true;
-                }
-
-                return schema.extensions.indexOf(this.computedExtension) > -1;
-            });
-
-            if(matches.length) {
-                const [ extension ] = matches[0];
-
-                return extension;
+            if(match) {
+                return match;
             }
 
             return 'file-alt';
@@ -243,73 +200,76 @@ export default {
         },
 
         /**
+         * Get the file name.
+         *
+         * @property String
+         */
+        computedName() {
+            return this.file instanceof Blob ? this.file.name : this.filename;
+        },
+
+        /**
+         * Get the formatted file size.
+         *
+         * @property String
+         */
+        computedSize() {
+            return this.bytesToSize(
+                this.file ? this.file.size : (this.size || 0)
+            );
+        },
+
+        computedSrc() {
+            if(this.file instanceof Blob) {
+                return ;
+            }
+
+            return this.url;
+        },
+
+        /**
          * Check to see if the file is an image.
          *
          * @property String
          */
         isImage() {
             return this.file && this.file.type.match(/^image/);
-        },
-
-        /**
-         * Check to see if the file is a video.
-         *
-         * @property String
-         */
-        isVideo() {
-            return this.file && this.file.type.match(/^video/);
-        },
-
-        /**
-         * Get the last time the file was modified (as timestamp)
-         *
-         * @property Number
-         */
-        cimputedLastModified() {
-            return this.file instanceof Blob ? this.file.lastModified : this.lastModified && this.lastModified.getTime();
-        },
-
-        /**
-         * Get the last time the file was modified (as Date)
-         *
-         * @property Date
-         */
-        computedLastModifiedDate() {
-            return this.file instanceof Blob ? this.file.lastModifiedDate : this.lastModified;
         }
+    },
 
+    mounted() {
+        if(this.file) {
+            this.readFile(this.file);
+        }
     },
 
     methods: {
 
-        readFile() {
-            const start = new Date().getTime();
-            const reader = new FileReader();
-            
-            this.currentProgress = 0;
+        readFile(file) {
+            return new Promise((resolve, reject) => {
+                this.data = null;
+                this.loading = true;
+                this.percentLoaded = 0;
 
-            reader.onprogress = e => {
-                if(e.lengthComputable) {
-                    this.$emit('progress', this.currentProgress = parseInt((e.loaded / e.total) * 100, 10));
-                }
-            };
+                const started = new Date;
+                const reader = new FileReader();
 
-            reader.onload = e => {
-                this.$emit('read', event);
-                this.$nextTick(() => this.image = e.target.result);
-
-                /*
-                setTimeout(() => {
-                    this.image = e.target.result;
-                }, 250 - (((new Date().getTime() - start) / 1000)));
-                */
-            };
-            
-            reader.onerror = e => {
-                this.$emit('error', error);
-            };
-
-            reader.readAsDataURL(this.file);
+                reader.onprogress = e => this.onProgress(e);
+                reader.onload = e => {
+                    setTimeout(() => {
+                        resolve(e.target.result);
+                    }, 666 - (((new Date().getTime() - started.getTime()) / 1000)));
+                };
+                reader.onerror = e => reject(e);                
+                reader.readAsDataURL(file);
+            }).then(data => {
+                this.$emit('read', data);
+                this.percentLoaded = null;
+                
+                return this.data = data;
+            }, e => {
+                this.$emit('error', e);
+            });
         },
 
         bytesToSize(bytes) {
@@ -319,10 +279,35 @@ export default {
             return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
         },
 
-        onLoad(event) {
-            this.loaded = true;
-            this.$emit('loaded');
+        icon() {
+            for(let [key, { extensions, validate }] of Object.entries(icons)) {
+                if(validate && validate(this.computedMime)) {
+                    return key;
+                }
+
+                if(extensions.indexOf(this.computedExtension) > -1) {
+                    return key;
+                }
+            }
         },
+
+        // onLoad(event) {
+        //     console.log('onload', event);
+        //     this.loaded = true;
+        //     this.$emit('loaded');
+        // },
+
+        // onLoadImage() {
+        //     // this.loading = false;
+        //     // this.loaded = true;
+        // },
+
+        onProgress(e) {
+            const progress = parseInt((e.loaded / e.total) * 100, 10);
+
+            this.$emit('progress', progress);
+            this.percentLoaded = progress;
+        }
 
     }
 
@@ -331,11 +316,12 @@ export default {
 
 <style>
 .file-preview {
-    width: 100%;
+    display: flex;
 }
 
 .file-preview .file-preview-inner {
     position: relative;
+    max-width: 10rem;
 }
 
 .file-preview .file-preview-close {

@@ -1,2 +1,7 @@
-import FilePreview from './src/FilePreview';
-export default FilePreview;
+import { icons } from './src/icons.js';
+import FilePreview from './src/FilePreview.vue';
+
+export {
+    icons,
+    FilePreview
+};

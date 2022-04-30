@@ -1,4 +1,4 @@
-export default {
+export const icons = {
     'file-archive': {
         extensions: ['7z', 'bz', 'bz2', 'gz', 'zip'],
     },
@@ -20,8 +20,12 @@ export default {
             return mime && mime.match(/^image/);
         }
     },
-    'file-pdf': ['pdf'],
-    'file-powerpoint': ['ppt', 'pptx'],
+    'file-pdf': {
+        extensions: ['pdf']
+    },
+    'file-powerpoint': {
+        extensions: ['ppt', 'pptx']
+    },
     'file-video': {
         extensions: ['3gp', 'avi', 'mpeg', 'ogv', 'ts', 'webm'],
         validate: mime => {
