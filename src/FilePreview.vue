@@ -15,9 +15,10 @@
             </slot>
 
             <slot name="progress" v-bind="this">
-                <div class="mt-2 mb-1">
+                <div 
+                    v-if="typeof percentLoaded === 'number'"
+                    class="file-preview-progress">
                     <progress-bar
-                        v-if="typeof percentLoaded === 'number'"
                         variant="primary"
                         height="10px"
                         :value="percentLoaded" />
@@ -285,7 +286,7 @@ export default {
                     return key;
                 }
 
-                if(extensions.indexOf(this.computedExtension) > -1) {
+                if(extensions && extensions.indexOf(this.computedExtension) > -1) {
                     return key;
                 }
             }
@@ -321,7 +322,7 @@ export default {
 
 .file-preview .file-preview-inner {
     position: relative;
-    max-width: 10rem;
+    width: 10rem;
 }
 
 .file-preview .file-preview-close {
@@ -349,10 +350,16 @@ export default {
     text-align: center;
     font-size: 60px;
     padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .file-preview .file-preview-thumbnail {
-    max-width: 100%;
+    object-fit: cover;
+    padding: 1rem;
+    height: 10rem;
+    width: 100%;
 }
 
 .file-preview .file-preview-filename {
@@ -365,6 +372,10 @@ export default {
 .file-preview .file-preview-filename,
 .file-preview .file-preview-filesize {
     text-align: center;
+}
+
+.file-preview .file-preview-progress {
+    margin: .5rem 0;
 }
 
 .file-preview .progress:not(:last-child) {

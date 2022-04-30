@@ -3028,7 +3028,7 @@ var render3 = function() {
   } } }, [_c("font-awesome-icon", { attrs: { "icon": "times-circle" } })], 1) : _vm._e(), _vm._t("icon", function() {
     return [_vm.url || _vm.data && _vm.isImage ? _c("div", { staticClass: "file-preview-image" }, [_c("img", { staticClass: "file-preview-thumbnail", attrs: { "src": _vm.url || _vm.data } })]) : _c("div", { staticClass: "file-preview-icon" }, [_c("font-awesome-icon", { attrs: { "icon": ["far", _vm.computedIcon] } })], 1)];
   }, null, this), _vm._t("progress", function() {
-    return [_c("div", { staticClass: "mt-2 mb-1" }, [typeof _vm.percentLoaded === "number" ? _c("progress-bar", { attrs: { "variant": "primary", "height": "10px", "value": _vm.percentLoaded } }) : _vm._e()], 1)];
+    return [typeof _vm.percentLoaded === "number" ? _c("div", { staticClass: "file-preview-progress" }, [_c("progress-bar", { attrs: { "variant": "primary", "height": "10px", "value": _vm.percentLoaded } })], 1) : _vm._e()];
   }, null, this), _vm._t("default"), _c("div", { staticClass: "file-preview-filename", domProps: { "innerHTML": _vm._s(_vm.computedName) } }), _c("div", { staticClass: "file-preview-filesize" }, [_vm._v(" (" + _vm._s(_vm.computedSize) + ") ")])], 2)]);
 };
 var staticRenderFns = [];
@@ -3143,7 +3143,7 @@ const __vue2_script = {
         if (validate && validate(this.computedMime)) {
           return key;
         }
-        if (extensions.indexOf(this.computedExtension) > -1) {
+        if (extensions && extensions.indexOf(this.computedExtension) > -1) {
           return key;
         }
       }
