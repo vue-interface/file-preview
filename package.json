@@ -1,6 +1,6 @@
 {
   "name": "@vue-interface/file-preview",
-  "version": "0.9.3",
+  "version": "1.0.0",
   "description": "A Vue file preview component.",
   "files": [
     "index.js",
